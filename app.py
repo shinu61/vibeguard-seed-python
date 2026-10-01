@@ -1,6 +1,8 @@
 """VibeGuard 시드 앱 — 취약한 의존성을 일부러 고정해 둔 예제."""
+import joblib
 import six
 import urllib3
+from joblib import Parallel, delayed
 
 
 def add(left, right):
@@ -20,3 +22,13 @@ def http_pool():
 
 def is_py3():
     return six.PY3
+
+
+def fingerprint(items):
+    """목록의 내용으로 지문을 만든다. 같은 내용이면 같은 값이 나온다."""
+    return joblib.hash(list(items))
+
+
+def square_all(numbers):
+    """각 수를 제곱한다. joblib의 작업 실행기를 한 줄로 쓴다."""
+    return Parallel(n_jobs=1)(delayed(pow)(number, 2) for number in numbers)
